@@ -9,21 +9,8 @@
 
 class OutputLayer: public Layer{
 public:
-  using layerPtr = Layer::layerPtr ;
-
-  OutputLayer();
-  explicit OutputLayer(const std::vector<std::shared_ptr<Neuron>>& neurons);
-
-  void setPreviousLayer(layerPtr layer) override;
-  layerPtr getPreviousLayer() const override;
-
-  void setNextLayer(layerPtr layer) override;
-  layerPtr getNextLayer() const override;
-
-  void setWeights() override;
-
-private:
-  layerPtr previousLayer_;
+  explicit OutputLayer(const size_t& neuronQuantity);
+  void error(const double& expected, const double& learningRate, const double& alpha) override;
 };
 
 #endif //COURSE_PROJECT_OUTPUTLAYER_HPP

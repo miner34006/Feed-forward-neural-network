@@ -4,64 +4,60 @@
 
 #include "neuron.hpp"
 
-Neuron::Neuron(const size_t& nextLayerNeuronQuantity):
-  forwardWeights_({}),
-  input_(0),
-  output_(0)
+
+void Neuron::activation()
 {
-  srand(time(NULL));
-  for (size_t i = 0; i<nextLayerNeuronQuantity; i++){
-    const float randomWeight = ((float) random() / (RAND_MAX));
-    forwardWeights_.push_back(randomWeight);
-  }
+  const double sigmoid = 1 / (1 + exp(-getInput()));
+  output_ = sigmoid;
 }
 
-Neuron::Neuron(const float &input, const std::vector<float>& forwardWeights):
-  forwardWeights_(forwardWeights),
-  input_(input),
-  output_(0)
-{
-  setOutput(activation());
-}
-
-float Neuron::activation() const
-{
-  const float sigmoid = 1 / (1 + exp(-getInput()));
-  return sigmoid;
-}
-
-void Neuron::setInput(const float &input)
+void Neuron::setInput(const double &input)
 {
   input_=input;
 }
 
-void Neuron::setOutput(const float &output)
+void Neuron::setOutput(const double &output)
 {
   output_=output;
 }
 
-float Neuron::getInput() const
+double Neuron::getInput() const
 {
   return input_;
 }
 
-float Neuron::getOutput() const
+double Neuron::getOutput() const
 {
   return output_;
 }
 
 void Neuron::setWeights(const size_t& nextLayerNeuronQuantity)
 {
-  srand(time(NULL));
   for (size_t i = 0; i<nextLayerNeuronQuantity; i++){
-    const float randomWeight = ((float) random() / (RAND_MAX));
+    const double randomWeight = ((float) random() / (RAND_MAX));
     forwardWeights_.push_back(randomWeight);
+    previousWeightDelta.push_back(0);
   }
 }
 
-std::vector<float> Neuron::getWeights()
+void Neuron::setWeightDelta(const double &weightDelta)
+{
+  weightDelta_ = weightDelta;
+}
+
+double Neuron::getWeight(const size_t &index) const
+{
+  return forwardWeights_.at(index);
+}
+
+std::vector<double> Neuron::getWeights()
 {
   return forwardWeights_;
+}
+
+double Neuron::getWeightDelta() const
+{
+  return weightDelta_;
 }
 
 std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
@@ -71,9 +67,27 @@ std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
     << "\toutput: "  << neuron.getOutput() << "\n"
     << "\tweights: ";
 
-  for (const float& weight: neuron.forwardWeights_){
+  for (const double& weight: neuron.forwardWeights_){
     out << weight << " ";
   }
   out << "\n";
   return out;
+}
+
+void Neuron::setWeight(const size_t &index, const double &value)
+{
+  if (index > forwardWeights_.size()){
+    throw std::invalid_argument("Invalid index");
+  }
+  forwardWeights_.at(index) = value;
+}
+
+double Neuron::getPreviousDelta(const size_t& index)
+{
+  return previousWeightDelta.at(index);
+}
+
+void Neuron::setPreviousDelta(const size_t &index, const double &delta)
+{
+  previousWeightDelta.at(index) = delta;
 }

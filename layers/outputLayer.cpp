@@ -4,35 +4,17 @@
 
 #include "outputLayer.hpp"
 
-using layerPtr = OutputLayer::layerPtr;
 
-OutputLayer::OutputLayer():
-  Layer({}),
-  previousLayer_(nullptr)
+OutputLayer::OutputLayer(const size_t &neuronQuantity):
+  Layer(neuronQuantity)
 {}
 
-OutputLayer::OutputLayer(const std::vector<std::shared_ptr<Neuron>> &neurons):
-  Layer(neurons),
-  previousLayer_(nullptr)
-{}
-
-void OutputLayer::setPreviousLayer(layerPtr layer)
+void OutputLayer::error(const double& expected, const double& learningRate, const double& alpha)
 {
-  previousLayer_ = layer;
+//  for (size_t i = 0; i < getNeuronQuantity(); i++){
+//    const double output = neurons_.at(i)->getOutput();
+//    const double error = expected - output;
+//    const double sigDx = output * (1 - output);
+//    neurons_.at(i)->setWeightDelta(error * sigDx);
+//  }
 }
-
-layerPtr OutputLayer::getPreviousLayer() const
-{
-  return previousLayer_;
-}
-
-void OutputLayer::setNextLayer(layerPtr layer)
-{}
-
-layerPtr OutputLayer::getNextLayer() const
-{
-  return nullptr;
-}
-
-void OutputLayer::setWeights()
-{}

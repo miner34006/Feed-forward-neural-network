@@ -1,22 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 #include "layers/layer.hpp"
 #include "neuron.hpp"
+#include <random>
 #include "neuralNetwork.hpp"
 
 int main() {
-  NeuralNetwork network;
+  srand((unsigned)time(NULL));
 
-  network.setNeuronQuantity(0, 5);
-  network.setNeuronQuantity(1, 3);
-  network.setNeuronQuantity(2, 1);
+  NeuralNetwork neuralNetwork(0.005, 0.5, {3, 2, 3});
 
-  network.setWeights();
+  neuralNetwork.setInputData({1, 0, 1});
 
-  std::cout << *network[0];
-  std::cout << *network[1];
-  std::cout << *network[2];
+  neuralNetwork.forceData(0, 1);
+
+  std::cout << *neuralNetwork[0];
+  std::cout << *neuralNetwork[1];
+  std::cout << *neuralNetwork[2];
 
 
   return 0;

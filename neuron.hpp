@@ -14,27 +14,34 @@
 class Neuron{
 public:
   Neuron() = default;
-  explicit Neuron(const size_t& nextLayerNeuronQuantity);
-  Neuron(const float &input, const std::vector<float>& forwardWeights);
 
   friend std::ostream& operator<<(std::ostream& out, const Neuron& neuron);
 
-  float activation() const;
+  void activation();
 
-  void setInput(const float& input);
-  void setOutput(const float& output);
+  void setInput(const double& input);
+  void setOutput(const double& output);
+  void setWeightDelta(const double& output);
+  void setPreviousDelta(const size_t& index, const double& delta);
 
-  float getInput() const;
-  float getOutput() const;
+  double getInput() const;
+  double getOutput() const;
+  double getWeightDelta() const;
+  double getPreviousDelta(const size_t& index);
 
   void setWeights(const size_t& nextLayerNeuronQuantity);
-  std::vector<float> getWeights();
+  double getWeight(const size_t& index) const;
+
+  void setWeight(const size_t& index, const double& value);
+  std::vector<double> getWeights();
 
 private:
-  std::vector<float> forwardWeights_;
+  double weightDelta_;
+  std::vector<double> forwardWeights_;
+  std::vector<double> previousWeightDelta;
 
-  float input_;
-  float output_;
+  double input_;
+  double output_;
 };
 
 std::ostream& operator<<(std::ostream& out, const Neuron& neuron);
