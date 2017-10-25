@@ -27,6 +27,50 @@ BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
     BOOST_CHECK_CLOSE((*neuralNetwork[0])[2]->getInput(), 2, 0.1);
   }
 
+  BOOST_AUTO_TEST_CASE(testForceDataFrom1To2)
+  {
+    NeuralNetwork neuralNetwork(0, 0, {2, 2, 2});
+    neuralNetwork.setInputData({1, 1});
+
+    (*neuralNetwork[0])[0]->setWeight(0, 0.5);
+    (*neuralNetwork[0])[0]->setWeight(1, 0.1);
+    (*neuralNetwork[0])[1]->setWeight(0, 0.2);
+    (*neuralNetwork[0])[1]->setWeight(1, 1);
+
+    neuralNetwork.forceData(0, 1);
+
+    BOOST_CHECK_CLOSE((*neuralNetwork[1])[0]->getInput(), 0.7, 0.1);
+    BOOST_CHECK_CLOSE((*neuralNetwork[1])[1]->getInput(), 1.1, 0.1);
+
+    BOOST_CHECK_CLOSE((*neuralNetwork[1])[0]->getOutput(), 0.668, 0.1);
+    BOOST_CHECK_CLOSE((*neuralNetwork[1])[1]->getOutput(), 0.750, 0.1);
+  }
+
+  BOOST_AUTO_TEST_CASE(testForceDataFrom2To3)
+  {
+    NeuralNetwork neuralNetwork(0, 0, {2, 2, 2});
+    neuralNetwork.setInputData({1, 1});
+
+    (*neuralNetwork[0])[0]->setWeight(0, 0.5);
+    (*neuralNetwork[0])[0]->setWeight(1, 0.1);
+    (*neuralNetwork[0])[1]->setWeight(0, 0.2);
+    (*neuralNetwork[0])[1]->setWeight(1, 1);
+
+    (*neuralNetwork[1])[0]->setWeight(0, 0.3);
+    (*neuralNetwork[1])[0]->setWeight(1, 0.4);
+    (*neuralNetwork[1])[1]->setWeight(0, 0.1);
+    (*neuralNetwork[1])[1]->setWeight(1, 0.9);
+
+    neuralNetwork.forceData(0, 1);
+    neuralNetwork.forceData(1, 2);
+
+    BOOST_CHECK_CLOSE((*neuralNetwork[2])[0]->getInput(), 0.275, 1);
+    BOOST_CHECK_CLOSE((*neuralNetwork[2])[1]->getInput(), 0.942, 1);
+
+    BOOST_CHECK_CLOSE((*neuralNetwork[2])[0]->getOutput(), 0.568, 1);
+    BOOST_CHECK_CLOSE((*neuralNetwork[2])[1]->getOutput(), 0.719, 1);
+  }
+
 BOOST_AUTO_TEST_SUITE_END()
 
 

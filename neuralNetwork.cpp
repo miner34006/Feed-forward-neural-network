@@ -27,8 +27,8 @@ std::shared_ptr<Layer> NeuralNetwork::operator[](const size_t &layerNumber)
 
 void NeuralNetwork::forceData(const size_t &fromLayer, const size_t &toLayer)
 {
-  Layer *from = layers_.at(fromLayer).get();
-  Layer *to = layers_.at(toLayer).get();
+  std::shared_ptr<Layer> &from = layers_.at(fromLayer);
+  std::shared_ptr<Layer> &to = layers_.at(toLayer);
 
   for (size_t i = 0; i < to->getNeuronQuantity(); i++){
     double sum = 0;

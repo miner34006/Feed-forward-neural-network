@@ -15,11 +15,11 @@ int main() {
   neuralNetwork.setInputData({1, 0, 1});
 
   neuralNetwork.forceData(0, 1);
+  neuralNetwork.forceData(1, 2);
 
   std::cout << *neuralNetwork[0];
   std::cout << *neuralNetwork[1];
   std::cout << *neuralNetwork[2];
-
 
   return 0;
 }
