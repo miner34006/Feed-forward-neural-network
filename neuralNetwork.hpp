@@ -15,26 +15,21 @@
 
 class NeuralNetwork{
 public:
-  NeuralNetwork(const double& learningRate, const double& momentum, const std::vector<int> &neuronPerLayer);
+  NeuralNetwork(const std::vector<int> &neuronsPerLayer, const bool& hasBias);
 
   std::shared_ptr<Layer> operator [](const size_t& index);
 
-  void setInputData(const std::vector<double>& data);
-
-  void forceData(const size_t& fromLayer, const size_t& toLayer);
-  bool predict();
-
-  void train(const size_t& repeat);
-  void trainLayers(const bool& expect);
+  double feedForward(const std::vector<double> &data);
+  void backPropagation(const double &expect, const double &learningRate, const double &momentum);
 
 private:
-  double learningRate_;
-  double momentum_;
-
   std::vector<std::shared_ptr<Layer>> layers_;
 
-  void createLayers(const std::vector<int> &neuronPerLayer);
+  void createLayers(const std::vector<int> &neuronPerLayer, const bool& hasBias);
   void setWeights();
+
+  void setInputData(const std::vector<double>& data);
+  void passDataForward(const size_t& fromLayer, const size_t& toLayer);
 };
 
 #endif //COURSE_PROJECT_NEURALNETWORK_HPP

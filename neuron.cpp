@@ -34,7 +34,7 @@ double Neuron::getOutput() const
 void Neuron::setWeights(const size_t& nextLayerNeuronQuantity)
 {
   for (size_t i = 0; i<nextLayerNeuronQuantity; i++){
-    const double randomWeight = ((float) random() / (RAND_MAX));
+    const double randomWeight = ((double) random() / (RAND_MAX)) * 2 - 1;
     forwardWeights_.push_back(randomWeight);
     previousWeightDelta.push_back(0);
   }
@@ -65,6 +65,7 @@ std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
   out << "Neuron information:\n"
     << "\tinput: " << neuron.getInput() << "\n"
     << "\toutput: "  << neuron.getOutput() << "\n"
+    << "\tweightDelta_: "  << neuron.getWeightDelta() << "\n"
     << "\tweights: ";
 
   for (const double& weight: neuron.forwardWeights_){

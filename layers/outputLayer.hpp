@@ -10,7 +10,13 @@
 class OutputLayer: public Layer{
 public:
   explicit OutputLayer(const size_t& neuronQuantity);
-  void error(const double& expected, const double& learningRate, const double& alpha) override;
+  bool hasBias() const override;
+  std::shared_ptr<Neuron> getBias() const override;
+
+  void error(const double& expected,
+             const double& learningRate,
+             const double& alpha,
+             const std::shared_ptr<Layer>& nextLayer) override;
 };
 
 #endif //COURSE_PROJECT_OUTPUTLAYER_HPP

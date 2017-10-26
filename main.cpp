@@ -1,25 +1,54 @@
 #include <iostream>
 #include <vector>
-#include <ctime>
+#include <string>
+#include <memory>
 
-#include "layers/layer.hpp"
-#include "neuron.hpp"
-#include <random>
+#include "xorTrainer.hpp"
 #include "neuralNetwork.hpp"
 
+void func(const double& number){
+  if (number >= 0.5){
+    std::cout << "true " << "(" << number << ")";
+  }
+  if (number < 0.5){
+    std::cout << "false " << "(" << number << ")";
+  }
+}
+
 int main() {
-  srand((unsigned)time(NULL));
+  srandom((unsigned)time(nullptr));
 
-  NeuralNetwork neuralNetwork(0.005, 0.5, {3, 2, 3});
+  const bool hasBias = true;
+  std::shared_ptr<NeuralNetwork> neuralNetwork(new NeuralNetwork({2, 3, 1}, hasBias));
 
-  neuralNetwork.setInputData({1, 0, 1});
+  double data = neuralNetwork->feedForward({0, 0});
+  std::cout << "false xor false = "; func(data); std::cout << "\n";
 
-  neuralNetwork.forceData(0, 1);
-  neuralNetwork.forceData(1, 2);
+  data = neuralNetwork->feedForward({0, 1});
+  std::cout << "false xor true = ";  func(data); std::cout << "\n";
 
-  std::cout << *neuralNetwork[0];
-  std::cout << *neuralNetwork[1];
-  std::cout << *neuralNetwork[2];
+  data = neuralNetwork->feedForward({1, 0});
+  std::cout << "true xor false = ";  func(data); std::cout << "\n";
+
+  data = neuralNetwork->feedForward({1, 1});
+  std::cout << "true xor true = ";   func(data); std::cout << "\n";
+
+  std::cout << "\n\n";
+  XORTrainer xorTrainer(neuralNetwork, 0.7, 0.7);
+  xorTrainer.train(10000);
+  std::cout << "TRAINING\n\n\n";
+
+  data = neuralNetwork->feedForward({0, 0});
+  std::cout << "false xor false = "; func(data); std::cout << "\n";
+
+  data = neuralNetwork->feedForward({0, 1});
+  std::cout << "false xor true = ";  func(data); std::cout << "\n";
+
+  data = neuralNetwork->feedForward({1, 0});
+  std::cout << "true xor false = ";  func(data); std::cout << "\n";
+
+  data = neuralNetwork->feedForward({1, 1});
+  std::cout << "true xor true = ";   func(data); std::cout << "\n";
 
   return 0;
 }

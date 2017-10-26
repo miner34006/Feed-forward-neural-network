@@ -24,11 +24,17 @@ public:
   
   virtual size_t getNeuronQuantity() const;
 
-  void setWeights(const std::shared_ptr<Layer>& nextLayer);
+  virtual void setWeights(const std::shared_ptr<Layer>& nextLayer);
 
-  virtual void error(const double& expected, const double& learningRate, const double& alpha) = 0;
+  virtual void error(const double& expected,
+                     const double& learningRate,
+                     const double& alpha,
+                     const std::shared_ptr<Layer>& nextLayer) = 0;
 
   virtual void setInputData(const std::vector<double>& data);
+
+  virtual bool hasBias() const = 0;
+  virtual std::shared_ptr<Neuron> getBias() const = 0;
 
 protected:
   std::vector<std::shared_ptr<Neuron>> neurons_;

@@ -4,15 +4,13 @@
 
 #include "neuralNetwork.hpp"
 
-NeuralNetwork::NeuralNetwork(const double& learningRate, const double& momentum, const std::vector<int> &neuronPerLayer):
-  learningRate_(learningRate),
-  momentum_(momentum),
+NeuralNetwork::NeuralNetwork(const std::vector<int> &neuronsPerLayer, const bool& hasBias):
   layers_({})
 {
-  if (neuronPerLayer.size() <= 2){
+  if (neuronsPerLayer.size() <= 2){
     throw std::invalid_argument("Number of layers must be more than 2");
   }
-  NeuralNetwork::createLayers(neuronPerLayer);
+  NeuralNetwork::createLayers(neuronsPerLayer, hasBias);
 }
 
 void NeuralNetwork::setInputData(const std::vector<double> &data)
@@ -25,7 +23,7 @@ std::shared_ptr<Layer> NeuralNetwork::operator[](const size_t &layerNumber)
   return layers_.at(layerNumber);
 }
 
-void NeuralNetwork::forceData(const size_t &fromLayer, const size_t &toLayer)
+void NeuralNetwork::passDataForward(const size_t &fromLayer, const size_t &toLayer)
 {
   std::shared_ptr<Layer> &from = layers_.at(fromLayer);
   std::shared_ptr<Layer> &to = layers_.at(toLayer);
@@ -37,80 +35,38 @@ void NeuralNetwork::forceData(const size_t &fromLayer, const size_t &toLayer)
       const double weight = (*from)[j]->getWeight(i);
       sum = sum + (input * weight);
     }
+    if (from->hasBias()){
+      sum += from->getBias()->getWeight(i);
+    }
+
     (*to)[i]->setInput(sum);
     (*to)[i]->activation();
   }
 }
 
-bool NeuralNetwork::predict()
+double NeuralNetwork::feedForward(const std::vector<double> &data)
 {
-  forceData(0, 1);
-  forceData(1, 2);
-  const double answer = (*layers_.at(2))[0]->getOutput();
-  return answer > 0.5;
+  NeuralNetwork::setInputData(data);
+  for (size_t i = 0; i < layers_.size() - 1; i++){
+    passDataForward(i, i + 1);
+  }
+  const double answer = (*layers_.back())[0]->getOutput();
+  return answer;
 }
 
-void NeuralNetwork::trainLayers(const bool& expect)
+void NeuralNetwork::backPropagation(const double &expect, const double &learningRate, const double &momentum)
 {
   for (auto j = layers_.rbegin(); j != layers_.rend(); j++){
-    (*j)->error(0, learningRate_, momentum_);
-  }
-  std::cout << "ERROR-" << pow((0 - (*layers_[2])[0]->getOutput()), 2) << "\n\n";
-}
-
-void NeuralNetwork::train(const size_t& repeat)
-{
-  std::vector<double> first({0, 0});
-  std::vector<double> second({0, 1});
-  std::vector<double> third({1, 0});
-  std::vector<double> fourth({1, 1});
-
-  for (size_t i = 0; i < repeat; i++){
-    setInputData(first);
-    if (predict() == false){
-
-    } else {
-      for (auto j = layers_.rbegin(); j != layers_.rend(); j++){
-        (*j)->error(0, learningRate_, momentum_);
-      }
-      std::cout << "ERROR-" << pow((0 - (*layers_[2])[0]->getOutput()), 2) << "\n";
-    }
-    setInputData(second);
-    if (predict() == true){
-
-    } else {
-      for (auto j = layers_.rbegin(); j != layers_.rend(); j++){
-        (*j)->error(1, learningRate_, momentum_);
-      }
-      std::cout << "ERROR-" << pow((1 - (*layers_[2])[0]->getOutput()), 2) << "\n";
-    }
-    setInputData(third);
-    if (predict() == true){
-
-    } else {
-      for (auto j = layers_.rbegin(); j != layers_.rend(); j++){
-        (*j)->error(1, learningRate_, momentum_);
-      }
-      std::cout << "ERROR-" << pow((1 - (*layers_[2])[0]->getOutput()), 2) << "\n";
-    }
-    setInputData(fourth);
-    if (predict() == false){
-
-    } else {
-      for (auto j = layers_.rbegin(); j != layers_.rend(); j++){
-        (*j)->error(0, learningRate_, momentum_);
-      }
-      std::cout << "ERROR-" << pow((0 - (*layers_[2])[0]->getOutput()), 2) << "\n";
-    }
+    (*j)->error(expect, learningRate, momentum, *(j-1));
   }
 }
 
-void NeuralNetwork::createLayers(const std::vector<int> &neuronPerLayer)
+void NeuralNetwork::createLayers(const std::vector<int> &neuronPerLayer, const bool& hasBias)
 {
-  layers_.push_back(std::make_shared<InputLayer>(neuronPerLayer.front()));
+  layers_.push_back(std::make_shared<InputLayer>(neuronPerLayer.front(), hasBias));
 
   for (size_t i = 1; i < neuronPerLayer.size() - 1; i++){
-    layers_.push_back(std::make_shared<HiddenLayer>(neuronPerLayer.at(i)));
+    layers_.push_back(std::make_shared<HiddenLayer>(neuronPerLayer.at(i), hasBias));
   }
 
   layers_.push_back(std::make_shared<OutputLayer>(neuronPerLayer.back()));
