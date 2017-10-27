@@ -34,42 +34,14 @@ void HiddenLayer::setWeights(const std::shared_ptr<Layer> &nextLayer)
   }
 }
 
-void HiddenLayer::changeWeights(const double& expected,
-                        const double& learningRate,
-                        const double& alpha,
-                        const std::shared_ptr<Layer>& nextLayer)
+void HiddenLayer::changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer)
 {
   for (size_t i = 0; i < getNeuronQuantity(); i++){
-    const double sigDx = neurons_.at(i)->getOutput() * (1 - neurons_.at(i)->getOutput());
-
-    double sum = 0;
-    for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
-      const double delta = (*nextLayer)[j]->getWeightDelta() * neurons_.at(i)->getWeight(j);
-      sum += delta;
-    }
-
-    const double weightDelta = sigDx * sum;
-    neurons_.at(i)->setWeightDelta(weightDelta);
-
-    for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
-      const double delta = (*nextLayer)[j]->getWeightDelta();
-      const double gradient = neurons_.at(i)->getOutput() * delta;
-
-      const double deltaW = learningRate * gradient + alpha * neurons_.at(i)->getPreviousDelta(j);
-      neurons_.at(i)->setPreviousDelta(j, deltaW);
-      neurons_.at(i)->setWeight(j, neurons_.at(i)->getWeight(j) + deltaW);
-    }
+    neurons_.at(i)->setWeightDelta(neurons_.at(i)->countWeightDelta(nextLayer));
+    neurons_.at(i)->changeWeights(learningRate, momentum, nextLayer);
   }
-
   if (hasBias()){
-    for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
-      const double delta = (*nextLayer)[j]->getWeightDelta();
-      const double gradient = getBias()->getOutput() * delta;
-
-      const double deltaW = learningRate * gradient + alpha * getBias()->getPreviousDelta(j);
-      getBias()->setPreviousDelta(j, deltaW);
-      getBias()->setWeight(j, getBias()->getWeight(j) + deltaW);
-    }
+    getBias()->changeWeights(learningRate, momentum, nextLayer);
   }
 }
 

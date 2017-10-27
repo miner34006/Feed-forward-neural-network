@@ -9,7 +9,7 @@
 #include <memory>
 #include <iostream>
 
-#include "../neuron.hpp"
+class Neuron;
 
 class Layer{
 public:

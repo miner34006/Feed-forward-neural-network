@@ -4,12 +4,14 @@
 
 #include "outputLayer.hpp"
 
+#include "../neuron.hpp"
+
 
 OutputLayer::OutputLayer(const size_t &neuronQuantity):
   Layer(neuronQuantity)
 {}
 
-void OutputLayer::error(const double& expected, const double& learningRate, const double& alpha)
+void OutputLayer::changeWeights(const double& expected, const double& learningRate, const double& alpha)
 {
   for (size_t i = 0; i < getNeuronQuantity(); i++){
     const double output = neurons_.at(i)->getOutput();

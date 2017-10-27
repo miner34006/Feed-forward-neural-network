@@ -11,6 +11,8 @@
 #include <ctime>       /* time */
 #include <iostream>
 
+#include "layers/layer.hpp"
+
 class Neuron{
 public:
   friend std::ostream& operator<<(std::ostream& out, const Neuron& neuron);
@@ -30,6 +32,9 @@ public:
   void setWeight(const size_t& index, const double& value);
   void setWeights(const size_t& nextLayerNeuronQuantity);
   double getWeight(const size_t& index) const;
+
+  double countWeightDelta(const std::shared_ptr<Layer>& nextLayer) const;
+  void changeWeights(const double& learningRate, const double& alpha, const std::shared_ptr<Layer>& nextLayer);
 
 private:
   double input_;

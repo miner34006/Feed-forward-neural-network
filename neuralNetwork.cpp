@@ -65,18 +65,16 @@ double NeuralNetwork::feedForward(const std::vector<double> &data)
 
 void NeuralNetwork::backPropagation(const double &expect, const double &learningRate, const double &momentum)
 {
-  //TODO MAYBE CHANGE ERROR METHOD
-
-  outputLayer_->error(expect, learningRate, momentum);
+  outputLayer_->changeWeights(expect, learningRate, momentum);
 
   const size_t lastHiddenLayer = hiddenLayers_.size() - 1;
-  hiddenLayers_[lastHiddenLayer]->changeWeights(expect, learningRate, momentum, outputLayer_);
+  hiddenLayers_[lastHiddenLayer]->changeWeights(learningRate, momentum, outputLayer_);
   for (auto hiddenLayer = hiddenLayers_.rbegin() + 1; hiddenLayer != hiddenLayers_.rend(); ++hiddenLayer){
-    (*hiddenLayer)->changeWeights(expect, learningRate, momentum, *(hiddenLayer - 1));
+    (*hiddenLayer)->changeWeights(learningRate, momentum, *(hiddenLayer - 1));
   }
 
   const size_t firstHiddenLayer = 0;
-  inputLayer_->changeWeights(expect, learningRate, momentum, hiddenLayers_[firstHiddenLayer]);
+  inputLayer_->changeWeights(learningRate, momentum, hiddenLayers_[firstHiddenLayer]);
 }
 
 void NeuralNetwork::createLayers(const std::vector<int> &neuronPerLayer, const bool& hasBias)

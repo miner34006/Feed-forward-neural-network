@@ -4,7 +4,6 @@
 
 #include "neuron.hpp"
 
-
 void Neuron::activation()
 {
   const double sigmoid = 1 / (1 + exp(-getInput()));
@@ -83,4 +82,29 @@ std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
   }
   out << "\n";
   return out;
+}
+
+double Neuron::countWeightDelta(const std::shared_ptr<Layer> &nextLayer) const
+{
+  const double sigDx = getOutput() * (1 - getOutput());
+
+  double sum = 0;
+  for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
+    const double delta = (*nextLayer)[j]->getWeightDelta() * getWeight(j);
+    sum += delta;
+  }
+  const double weightDelta = sigDx * sum;
+  return weightDelta;
+}
+
+void Neuron::changeWeights(const double& learningRate, const double& alpha, const std::shared_ptr<Layer>& nextLayer)
+{
+  for (size_t i = 0; i < nextLayer->getNeuronQuantity(); i++){
+    const double delta = (*nextLayer)[i]->getWeightDelta();
+    const double gradient = getOutput() * delta;
+
+    const double deltaW = learningRate * gradient + alpha * getPreviousDelta(i);
+    setPreviousDelta(i, deltaW);
+    setWeight(i, getWeight(i) + deltaW);
+  }
 }

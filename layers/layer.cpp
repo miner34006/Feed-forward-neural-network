@@ -4,6 +4,8 @@
 
 #include "layer.hpp"
 
+#include "../neuron.hpp"
+
 
 Layer::Layer(const size_t &neuronQuantity)
 {

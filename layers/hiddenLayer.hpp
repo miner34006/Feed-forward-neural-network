@@ -18,10 +18,7 @@ public:
   bool hasBias() const override;
   std::shared_ptr<Neuron> getBias() const override;
 
-  void changeWeights(const double& expected,
-             const double& learningRate,
-             const double& alpha,
-             const std::shared_ptr<Layer>& nextLayer);
+  void changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer);
 
 private:
   std::shared_ptr<Neuron> bias_;

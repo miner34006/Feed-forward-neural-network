@@ -11,7 +11,7 @@ class OutputLayer: public Layer{
 public:
   explicit OutputLayer(const size_t& neuronQuantity);
 
-  void error(const double& expected, const double& learningRate, const double& alpha);
+  void changeWeights(const double& expected, const double& learningRate, const double& alpha);
 };
 
 #endif //COURSE_PROJECT_OUTPUTLAYER_HPP

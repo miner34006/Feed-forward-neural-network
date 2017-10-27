@@ -19,7 +19,7 @@ int main() {
   srandom((unsigned)time(nullptr));
 
   const bool hasBias = true;
-  std::shared_ptr<NeuralNetwork> neuralNetwork(new NeuralNetwork({2, 3, 1}, hasBias));
+  std::shared_ptr<NeuralNetwork> neuralNetwork(new NeuralNetwork({2, 2, 1}, hasBias));
 
   double data = neuralNetwork->feedForward({0, 0});
   std::cout << "false xor false = "; func(data); std::cout << "\n";
@@ -35,8 +35,8 @@ int main() {
 
   std::cout << "\n\n";
 
-  XORTraining xorTrainer(neuralNetwork, 0.7, 0.7);
-  xorTrainer.train(10000);
+  XORTraining xorTrainer(neuralNetwork, 0.3, 0.7);
+  xorTrainer.train(100000);
   std::cout << "TRAINING\n\n\n";
 
   data = neuralNetwork->feedForward({0, 0});
