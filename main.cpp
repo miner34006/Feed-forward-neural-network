@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include "xorTrainer.hpp"
+#include "training/xorTraining.hpp"
 #include "neuralNetwork.hpp"
 
 void func(const double& number){
@@ -34,7 +34,8 @@ int main() {
   std::cout << "true xor true = ";   func(data); std::cout << "\n";
 
   std::cout << "\n\n";
-  XORTrainer xorTrainer(neuralNetwork, 0.7, 0.7);
+
+  XORTraining xorTrainer(neuralNetwork, 0.7, 0.7);
   xorTrainer.train(10000);
   std::cout << "TRAINING\n\n\n";
 
