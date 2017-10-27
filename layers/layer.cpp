@@ -5,8 +5,7 @@
 #include "layer.hpp"
 
 
-Layer::Layer(const size_t &neuronQuantity):
-  neurons_({})
+Layer::Layer(const size_t &neuronQuantity)
 {
   for (size_t i = 0; i < neuronQuantity; i++){
     neurons_.push_back(std::make_shared<Neuron>());
@@ -26,6 +25,17 @@ void Layer::setInputData(const std::vector<double> &data)
   for (size_t i = 0; i < neurons_.size(); i++){
     neurons_.at(i)->setInput(data.at(i));
   }
+}
+
+double Layer::getTotalImpulse(const size_t &toNeuron) const
+{
+  double impulse = 0;
+  for (size_t i = 0; i < getNeuronQuantity(); i++){
+    const double input = (*this).neurons_.at(i)->getOutput();
+    const double weight = (*this).neurons_.at(i)->getWeight(toNeuron);
+    impulse += (input * weight);
+  }
+  return impulse;
 }
 
 std::ostream& operator <<(std::ostream &out, const Layer &layer)
@@ -52,4 +62,14 @@ void Layer::setWeights(const std::shared_ptr<Layer> &nextLayer)
   for (const std::shared_ptr<Neuron>& neuron: neurons_){
     neuron->setWeights(linksQuantity);
   }
+}
+
+std::shared_ptr<Neuron> Layer::getBias() const
+{
+  return nullptr;
+}
+
+bool Layer::hasBias() const
+{
+  return false;
 }

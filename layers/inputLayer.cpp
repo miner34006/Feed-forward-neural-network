@@ -40,16 +40,13 @@ std::shared_ptr<Neuron> InputLayer::getBias() const
 
 void InputLayer::setWeights(const std::shared_ptr<Layer> &nextLayer)
 {
-  const size_t linksQuantity = nextLayer->getNeuronQuantity();
-  for (const std::shared_ptr<Neuron>& neuron: neurons_){
-    neuron->setWeights(linksQuantity);
-  }
+  Layer::setWeights(nextLayer);
   if (hasBias()){
-    bias_->setWeights(linksQuantity);
+    bias_->setWeights(nextLayer->getNeuronQuantity());
   }
 }
 
-void InputLayer::error(const double &expected,
+void InputLayer::changeWeights(const double &expected,
                        const double& learningRate,
                        const double& alpha,
                        const std::shared_ptr<Layer>& nextLayer)
@@ -75,7 +72,6 @@ void InputLayer::error(const double &expected,
       neurons_.at(i)->setWeight(j, neurons_.at(i)->getWeight(j) + deltaW);
     }
   }
-
   if (hasBias()){
     for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
       const double delta = (*nextLayer)[j]->getWeightDelta();
@@ -86,4 +82,13 @@ void InputLayer::error(const double &expected,
       getBias()->setWeight(j, getBias()->getWeight(j) + deltaW);
     }
   }
+}
+
+double InputLayer::getTotalImpulse(const size_t &toNeuron) const
+{
+  double impulse = Layer::getTotalImpulse(toNeuron);
+  if (hasBias()){
+    impulse += getBias()->getWeight(toNeuron);
+  }
+  return impulse;
 }

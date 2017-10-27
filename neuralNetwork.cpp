@@ -43,23 +43,12 @@ std::shared_ptr<Layer> NeuralNetwork::operator[](const size_t &layerNumber)
 
 void NeuralNetwork::passDataForward(const size_t &fromLayer, const size_t &toLayer)
 {
-  //TODO maybe add matrix calculation?
-
   std::shared_ptr<Layer> from = (*this)[fromLayer];
   std::shared_ptr<Layer> to = (*this)[toLayer];
 
   for (size_t i = 0; i < to->getNeuronQuantity(); i++){
-    double sum = 0;
-    for (size_t j = 0; j < from->getNeuronQuantity(); j++){
-      const double input = (*from)[j]->getOutput();
-      const double weight = (*from)[j]->getWeight(i);
-      sum = sum + (input * weight);
-    }
-    if (from->hasBias()){
-      sum += from->getBias()->getWeight(i);
-    }
-
-    (*to)[i]->setInput(sum);
+    double impulse = from->getTotalImpulse(i);
+    (*to)[i]->setInput(impulse);
     (*to)[i]->activation();
   }
 }
@@ -78,16 +67,16 @@ void NeuralNetwork::backPropagation(const double &expect, const double &learning
 {
   //TODO MAYBE CHANGE ERROR METHOD
 
-  outputLayer_->error(expect, learningRate, momentum, nullptr);
+  outputLayer_->error(expect, learningRate, momentum);
 
   const size_t lastHiddenLayer = hiddenLayers_.size() - 1;
-  hiddenLayers_[lastHiddenLayer]->error(expect, learningRate, momentum, outputLayer_);
+  hiddenLayers_[lastHiddenLayer]->changeWeights(expect, learningRate, momentum, outputLayer_);
   for (auto hiddenLayer = hiddenLayers_.rbegin() + 1; hiddenLayer != hiddenLayers_.rend(); ++hiddenLayer){
-    (*hiddenLayer)->error(expect, learningRate, momentum, *(hiddenLayer - 1));
+    (*hiddenLayer)->changeWeights(expect, learningRate, momentum, *(hiddenLayer - 1));
   }
 
   const size_t firstHiddenLayer = 0;
-  inputLayer_->error(expect, learningRate, momentum, hiddenLayers_[firstHiddenLayer]);
+  inputLayer_->changeWeights(expect, learningRate, momentum, hiddenLayers_[firstHiddenLayer]);
 }
 
 void NeuralNetwork::createLayers(const std::vector<int> &neuronPerLayer, const bool& hasBias)

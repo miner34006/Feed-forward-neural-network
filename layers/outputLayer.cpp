@@ -9,20 +9,7 @@ OutputLayer::OutputLayer(const size_t &neuronQuantity):
   Layer(neuronQuantity)
 {}
 
-bool OutputLayer::hasBias() const
-{
-  return false;
-}
-
-std::shared_ptr<Neuron> OutputLayer::getBias() const
-{
-  return nullptr;
-}
-
-void OutputLayer::error(const double& expected,
-                        const double& learningRate,
-                        const double& alpha,
-                        const std::shared_ptr<Layer>& nextLayer)
+void OutputLayer::error(const double& expected, const double& learningRate, const double& alpha)
 {
   for (size_t i = 0; i < getNeuronQuantity(); i++){
     const double output = neurons_.at(i)->getOutput();

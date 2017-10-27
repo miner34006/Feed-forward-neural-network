@@ -12,14 +12,16 @@ class HiddenLayer: public Layer{
 public:
   explicit HiddenLayer(const size_t& neuronQuantity, const bool& hasBias);
   void setWeights(const std::shared_ptr<Layer> &nextLayer) override;
-  bool hasBias() const override;
 
+  double getTotalImpulse(const size_t &toNeuron) const override;
+
+  bool hasBias() const override;
   std::shared_ptr<Neuron> getBias() const override;
 
-  void error(const double& expected,
+  void changeWeights(const double& expected,
              const double& learningRate,
              const double& alpha,
-             const std::shared_ptr<Layer>& nextLayer) override;
+             const std::shared_ptr<Layer>& nextLayer);
 
 private:
   std::shared_ptr<Neuron> bias_;

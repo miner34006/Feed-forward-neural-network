@@ -28,16 +28,13 @@ std::shared_ptr<Neuron> HiddenLayer::getBias() const
 
 void HiddenLayer::setWeights(const std::shared_ptr<Layer> &nextLayer)
 {
-  const size_t linksQuantity = nextLayer->getNeuronQuantity();
-  for (const std::shared_ptr<Neuron>& neuron: neurons_){
-    neuron->setWeights(linksQuantity);
-  }
+  Layer::setWeights(nextLayer);
   if (hasBias()){
-    bias_->setWeights(linksQuantity);
+    bias_->setWeights(nextLayer->getNeuronQuantity());
   }
 }
 
-void HiddenLayer::error(const double& expected,
+void HiddenLayer::changeWeights(const double& expected,
                         const double& learningRate,
                         const double& alpha,
                         const std::shared_ptr<Layer>& nextLayer)
@@ -74,4 +71,13 @@ void HiddenLayer::error(const double& expected,
       getBias()->setWeight(j, getBias()->getWeight(j) + deltaW);
     }
   }
+}
+
+double HiddenLayer::getTotalImpulse(const size_t &toNeuron) const
+{
+  double impulse = Layer::getTotalImpulse(toNeuron);
+  if (hasBias()){
+    impulse += getBias()->getWeight(toNeuron);
+  }
+  return impulse;
 }
