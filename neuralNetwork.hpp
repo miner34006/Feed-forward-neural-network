@@ -7,11 +7,12 @@
 
 #include <vector>
 #include <memory>
-#include <math.h>
+#include <cmath>
 
-#include "layers/inputLayer.hpp"
-#include "layers/hiddenLayer.hpp"
-#include "layers/outputLayer.hpp"
+class Layer;
+class InputLayer;
+class HiddenLayer;
+class OutputLayer;
 
 class NeuralNetwork{
 public:
@@ -19,10 +20,16 @@ public:
 
   std::shared_ptr<Layer> operator [](const size_t& index);
 
+  size_t getLayersCount() const;
+
   double feedForward(const std::vector<double> &data);
   void backPropagation(const double &expect, const double &learningRate, const double &momentum);
 
 private:
+  std::shared_ptr<InputLayer> inputLayer_;
+  std::vector<std::shared_ptr<HiddenLayer>> hiddenLayers_;
+  std::shared_ptr<OutputLayer> outputLayer_;
+
   std::vector<std::shared_ptr<Layer>> layers_;
 
   void createLayers(const std::vector<int> &neuronPerLayer, const bool& hasBias);

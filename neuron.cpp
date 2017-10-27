@@ -31,6 +31,11 @@ double Neuron::getOutput() const
   return output_;
 }
 
+void Neuron::setWeight(const size_t &index, const double &value)
+{
+  forwardWeights_.at(index) = value;
+}
+
 void Neuron::setWeights(const size_t& nextLayerNeuronQuantity)
 {
   for (size_t i = 0; i<nextLayerNeuronQuantity; i++){
@@ -40,47 +45,19 @@ void Neuron::setWeights(const size_t& nextLayerNeuronQuantity)
   }
 }
 
-void Neuron::setWeightDelta(const double &weightDelta)
-{
-  weightDelta_ = weightDelta;
-}
-
 double Neuron::getWeight(const size_t &index) const
 {
   return forwardWeights_.at(index);
 }
 
-std::vector<double> Neuron::getWeights()
+void Neuron::setWeightDelta(const double &weightDelta)
 {
-  return forwardWeights_;
+  weightDelta_ = weightDelta;
 }
 
 double Neuron::getWeightDelta() const
 {
   return weightDelta_;
-}
-
-std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
-{
-  out << "Neuron information:\n"
-    << "\tinput: " << neuron.getInput() << "\n"
-    << "\toutput: "  << neuron.getOutput() << "\n"
-    << "\tweightDelta_: "  << neuron.getWeightDelta() << "\n"
-    << "\tweights: ";
-
-  for (const double& weight: neuron.forwardWeights_){
-    out << weight << " ";
-  }
-  out << "\n";
-  return out;
-}
-
-void Neuron::setWeight(const size_t &index, const double &value)
-{
-  if (index > forwardWeights_.size()){
-    throw std::invalid_argument("Invalid index");
-  }
-  forwardWeights_.at(index) = value;
 }
 
 double Neuron::getPreviousDelta(const size_t& index)
@@ -91,4 +68,19 @@ double Neuron::getPreviousDelta(const size_t& index)
 void Neuron::setPreviousDelta(const size_t &index, const double &delta)
 {
   previousWeightDelta.at(index) = delta;
+}
+
+std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
+{
+  out << "Neuron information:\n"
+      << "\tinput: " << neuron.getInput() << "\n"
+      << "\toutput: "  << neuron.getOutput() << "\n"
+      << "\tweightDelta_: "  << neuron.getWeightDelta() << "\n"
+      << "\tweights: ";
+
+  for (const double& weight: neuron.forwardWeights_){
+    out << weight << " ";
+  }
+  out << "\n";
+  return out;
 }

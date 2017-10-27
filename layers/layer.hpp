@@ -13,9 +13,6 @@
 
 class Layer{
 public:
-  using layerPtr = std::shared_ptr<Layer>;
-
-  Layer() = default;
   explicit Layer(const size_t& neuronQuantity);
   virtual ~Layer() = default;
 

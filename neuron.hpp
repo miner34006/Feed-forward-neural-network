@@ -13,8 +13,6 @@
 
 class Neuron{
 public:
-  Neuron() = default;
-
   friend std::ostream& operator<<(std::ostream& out, const Neuron& neuron);
 
   void activation();
@@ -29,19 +27,17 @@ public:
   double getWeightDelta() const;
   double getPreviousDelta(const size_t& index);
 
+  void setWeight(const size_t& index, const double& value);
   void setWeights(const size_t& nextLayerNeuronQuantity);
   double getWeight(const size_t& index) const;
 
-  void setWeight(const size_t& index, const double& value);
-  std::vector<double> getWeights();
-
 private:
-  double weightDelta_;
-  std::vector<double> forwardWeights_;
-  std::vector<double> previousWeightDelta;
-
   double input_;
   double output_;
+  double weightDelta_;
+
+  std::vector<double> forwardWeights_;
+  std::vector<double> previousWeightDelta;
 };
 
 std::ostream& operator<<(std::ostream& out, const Neuron& neuron);

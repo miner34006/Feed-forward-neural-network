@@ -43,9 +43,6 @@ std::ostream& operator <<(std::ostream &out, const Layer &layer)
 
 std::shared_ptr<Neuron> Layer::operator[](const size_t &neuronIndex)
 {
-  if (neuronIndex >= neurons_.size()){
-    throw std::out_of_range("layerNumber out of range;");
-  }
   return neurons_.at(neuronIndex);
 }
 
