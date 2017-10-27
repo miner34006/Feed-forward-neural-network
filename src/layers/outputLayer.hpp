@@ -11,7 +11,11 @@ class OutputLayer: public Layer{
 public:
   explicit OutputLayer(const size_t& neuronQuantity);
 
+  friend std::ostream& operator<<(std::ostream& out, const OutputLayer& layer);
+
   void changeWeights(const double& expected, const double& learningRate, const double& alpha);
 };
+
+std::ostream& operator<<(std::ostream& out, const OutputLayer& layer);
 
 #endif //COURSE_PROJECT_OUTPUTLAYER_HPP

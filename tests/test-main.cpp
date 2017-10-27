@@ -3,8 +3,8 @@
 
 #include <boost/test/included/unit_test.hpp>
 
-#include "../neuron.hpp"
-#include "../neuralNetwork.hpp"
+#include "../src/neuron/neuron.hpp"
+#include "../src/neuralNetwork/neuralNetwork.hpp"
 
 BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
 

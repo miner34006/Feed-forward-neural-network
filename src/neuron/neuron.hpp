@@ -11,7 +11,7 @@
 #include <ctime>       /* time */
 #include <iostream>
 
-#include "layers/layer.hpp"
+#include "../layers/layer.hpp"
 
 class Neuron{
 public:

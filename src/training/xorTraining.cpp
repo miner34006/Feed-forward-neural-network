@@ -4,7 +4,7 @@
 
 #include "xorTraining.hpp"
 
-#include "../neuralNetwork.hpp"
+#include "../neuralNetwork/neuralNetwork.hpp"
 
 XORTraining::XORTraining(const std::shared_ptr<NeuralNetwork> &neuralNetwork,
                          const double &learningRate,
@@ -21,7 +21,7 @@ void XORTraining::trainSingle(const std::vector<double> &trainData)
 void XORTraining::trainSet()
 {
   trainSingle({0, 0, 0});
-  trainSingle({1, 1, 0});
   trainSingle({0, 1, 1});
   trainSingle({1, 0, 1});
+  trainSingle({1, 1, 0});
 }

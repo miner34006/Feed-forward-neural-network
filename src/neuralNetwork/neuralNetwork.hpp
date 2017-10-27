@@ -18,6 +18,7 @@ class NeuralNetwork{
 public:
   NeuralNetwork(const std::vector<int> &neuronsPerLayer, const bool& hasBias);
 
+  friend std::ostream& operator<<(std::ostream& out, const NeuralNetwork& neuralNetwork);
   std::shared_ptr<Layer> operator [](const size_t& index);
 
   size_t getLayersCount() const;
@@ -38,5 +39,7 @@ private:
   void setInputData(const std::vector<double>& data);
   void passDataForward(const size_t& fromLayer, const size_t& toLayer);
 };
+
+std::ostream& operator<<(std::ostream& out, const NeuralNetwork& neuralNetwork);
 
 #endif //COURSE_PROJECT_NEURALNETWORK_HPP

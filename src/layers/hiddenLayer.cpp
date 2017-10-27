@@ -18,7 +18,7 @@ HiddenLayer::HiddenLayer(const size_t &neuronQuantity, const bool& hasBias):
 
 bool HiddenLayer::hasBias() const
 {
-  static_cast<bool>(bias_.get());
+  return static_cast<bool>(bias_.get());
 }
 
 std::shared_ptr<Neuron> HiddenLayer::getBias() const
@@ -52,4 +52,21 @@ double HiddenLayer::getTotalImpulse(const size_t &toNeuron) const
     impulse += getBias()->getWeight(toNeuron);
   }
   return impulse;
+}
+
+std::ostream& operator <<(std::ostream &out, const HiddenLayer &layer)
+{
+  out << "___________________\n"
+      << "Hidden layer information:\n"
+      << "\tNeuron quantity: " << layer.getNeuronQuantity() << ";\n";
+
+  size_t j = 0;
+  for (const std::shared_ptr<Neuron>& neuron: layer.neurons_){
+    out << "\tNeuron №" << j++ << ": \n\t" << *neuron << "\n";
+  }
+  if (layer.hasBias()){
+    out << "\tBias neuron: \n\t" << *layer.getBias();
+  }
+  out << "\n";
+  return out;
 }

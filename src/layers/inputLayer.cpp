@@ -65,3 +65,20 @@ double InputLayer::getTotalImpulse(const size_t &toNeuron) const
   }
   return impulse;
 }
+
+std::ostream& operator <<(std::ostream &out, const InputLayer &layer)
+{
+  out << "___________________\n"
+      << "Input layer information:\n"
+      << "\tNeuron quantity: " << layer.getNeuronQuantity() << ";\n";
+
+  size_t j = 0;
+  for (const std::shared_ptr<Neuron>& neuron: layer.neurons_){
+    out << "\tNeuron №" << j++ << ": \n\t" << *neuron << "\n";
+  }
+  if (layer.hasBias()){
+    out << "\tBias neuron: \n\t" << *layer.getBias();
+  }
+  out << "\n";
+  return out;
+}

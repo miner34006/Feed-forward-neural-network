@@ -4,7 +4,7 @@
 
 #include "outputLayer.hpp"
 
-#include "../neuron.hpp"
+#include "../neuron/neuron.hpp"
 
 
 OutputLayer::OutputLayer(const size_t &neuronQuantity):
@@ -19,4 +19,18 @@ void OutputLayer::changeWeights(const double& expected, const double& learningRa
     const double sigDx = output * (1 - output);
     neurons_.at(i)->setWeightDelta(error * sigDx);
   }
+}
+
+std::ostream& operator <<(std::ostream &out, const OutputLayer &layer)
+{
+  out << "___________________\n"
+      << "Output layer information:\n"
+      << "\tNeuron quantity: " << layer.getNeuronQuantity() << ";\n";
+
+  size_t j = 0;
+  for (const std::shared_ptr<Neuron>& neuron: layer.neurons_){
+    out << "\tNeuron №" << j++ << ": \n\t" << *neuron << "\n";
+  }
+  out << "\n";
+  return out;
 }

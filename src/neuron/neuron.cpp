@@ -72,14 +72,15 @@ void Neuron::setPreviousDelta(const size_t &index, const double &delta)
 std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
 {
   out << "Neuron information:\n"
-      << "\tinput: " << neuron.getInput() << "\n"
-      << "\toutput: "  << neuron.getOutput() << "\n"
-      << "\tweightDelta_: "  << neuron.getWeightDelta() << "\n"
-      << "\tweights: ";
+      << "\t\tinput: " << neuron.getInput() << "\n"
+      << "\t\toutput: "  << neuron.getOutput() << "\n"
+      << "\t\tweightDelta_: "  << neuron.getWeightDelta() << "\n"
+      << "\t\tweights: ";
 
   for (const double& weight: neuron.forwardWeights_){
     out << weight << " ";
   }
+
   out << "\n";
   return out;
 }

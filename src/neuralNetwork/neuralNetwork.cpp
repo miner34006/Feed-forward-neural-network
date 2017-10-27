@@ -4,9 +4,9 @@
 
 #include "neuralNetwork.hpp"
 
-#include "layers/inputLayer.hpp"
-#include "layers/hiddenLayer.hpp"
-#include "layers/outputLayer.hpp"
+#include "../layers/inputLayer.hpp"
+#include "../layers/hiddenLayer.hpp"
+#include "../layers/outputLayer.hpp"
 
 NeuralNetwork::NeuralNetwork(const std::vector<int> &neuronsPerLayer, const bool& hasBias)
 {
@@ -101,4 +101,20 @@ void NeuralNetwork::setWeights()
 
   const size_t lastHiddenLayer = hiddenLayers_.size() - 1;
   hiddenLayers_.at(lastHiddenLayer)->setWeights(outputLayer_);
+}
+
+std::ostream& operator<<(std::ostream &out, const NeuralNetwork &neuralNetwork)
+{
+  out << "Neural network information:\n"
+      << "\tNumber of layers: " << neuralNetwork.getLayersCount() << "\n\n";
+
+  out << *(neuralNetwork.inputLayer_);
+
+  for (size_t i = 0; i < neuralNetwork.hiddenLayers_.size(); i++){
+    out << *neuralNetwork.hiddenLayers_.at(i);
+  }
+
+  out << *(neuralNetwork.outputLayer_);
+
+  return out;
 }

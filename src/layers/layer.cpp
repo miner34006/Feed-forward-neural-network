@@ -4,7 +4,7 @@
 
 #include "layer.hpp"
 
-#include "../neuron.hpp"
+#include "../neuron/neuron.hpp"
 
 
 Layer::Layer(const size_t &neuronQuantity)
@@ -38,19 +38,6 @@ double Layer::getTotalImpulse(const size_t &toNeuron) const
     impulse += (input * weight);
   }
   return impulse;
-}
-
-std::ostream& operator <<(std::ostream &out, const Layer &layer)
-{
-  out << "Layer information:\n"
-    << "\tNeuron quantity: " << layer.getNeuronQuantity() << ";\n";
-
-  size_t j = 0;
-  for (const std::shared_ptr<Neuron>& neuron: layer.neurons_){
-    out << "\tNeuron № " << j++ << ": " << *neuron << "\n";
-  }
-  out << "\n";
-  return out;
 }
 
 std::shared_ptr<Neuron> Layer::operator[](const size_t &neuronIndex)
