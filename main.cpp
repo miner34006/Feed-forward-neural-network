@@ -3,7 +3,7 @@
 
 #include "src/training/xorTraining.hpp"
 #include "src/neuralNetwork/neuralNetwork.hpp"
-
+#include "src/imageConverter/imageConverter.hpp"
 
 void func(const double& number){
   if (number >= 0.5){
@@ -15,6 +15,8 @@ void func(const double& number){
 }
 
 int main(){
+  //ImageConverter converter("/Users/miner34006/Documents/c++/Clion/Course project/trainData/6/6_1.bmp");
+
   srandom((unsigned)time(nullptr));
 
   const bool hasBias = true;
@@ -34,8 +36,8 @@ int main(){
 
   std::cout << "\n\n";
 
-  XORTraining xorTrainer(neuralNetwork, 0.7, 0.7);
-  xorTrainer.train(10000);
+  XORTraining xorTrainer(neuralNetwork, 0.05, 0.99);
+  xorTrainer.train(100000);
   std::cout << "TRAINING\n\n\n";
 
   data = neuralNetwork->feedForward({0, 0});
