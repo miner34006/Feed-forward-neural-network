@@ -34,3 +34,15 @@ std::ostream& operator <<(std::ostream &out, const OutputLayer &layer)
   out << "\n";
   return out;
 }
+
+double OutputLayer::getMaxImpulse() const
+{
+  double maxImpulse = neurons_.at(0)->getOutput();
+  for (auto neuron = neurons_.begin() + 1; neuron != neurons_.end(); ++neuron){
+    const double neuronImpulse = (*neuron)->getOutput();
+    if (neuronImpulse > maxImpulse){
+      maxImpulse = neuronImpulse;
+    }
+  }
+  return maxImpulse;
+}

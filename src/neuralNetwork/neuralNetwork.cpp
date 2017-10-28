@@ -59,7 +59,7 @@ double NeuralNetwork::feedForward(const std::vector<double> &data)
   for (size_t i = 0; i < getLayersCount() - 1; i++){
     passDataForward(i, i + 1);
   }
-  const double answer = (*outputLayer_)[0]->getOutput();
+  const double answer = (*outputLayer_).getMaxImpulse();
   return answer;
 }
 

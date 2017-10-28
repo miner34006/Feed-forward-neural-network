@@ -13,6 +13,8 @@ public:
 
   friend std::ostream& operator<<(std::ostream& out, const OutputLayer& layer);
 
+  double getMaxImpulse() const;
+
   void changeWeights(const double& expected, const double& learningRate, const double& alpha);
 };
 
