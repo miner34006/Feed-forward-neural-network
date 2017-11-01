@@ -9,7 +9,6 @@
 #include <cmath>
 #include <iostream>
 
-#include "../layers/layer.hpp"
 
 class Neuron{
 public:
@@ -30,8 +29,8 @@ public:
   double getPreviousDelta(const size_t& index) const;
   double getWeight(const size_t& index) const;
 
-  double countWeightDelta(const std::shared_ptr<Layer>& nextLayer) const;
-  void changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer);
+  double countWeightDelta(const std::vector<double> &nextLayerWeightDelta) const;
+  void changeWeights(const double& learningRate, const double& momentum, const std::vector<double> &nextLayerWeightDelta);
 
 private:
   double input_;

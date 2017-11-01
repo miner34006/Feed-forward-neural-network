@@ -36,12 +36,20 @@ void HiddenLayer::setWeights(const std::shared_ptr<Layer> &nextLayer)
 
 void HiddenLayer::changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer)
 {
+  std::vector<double> nextLayerWeightDelta = {};
+
   for (size_t i = 0; i < getNeuronQuantity(); i++){
-    neurons_.at(i)->setWeightDelta(neurons_.at(i)->countWeightDelta(nextLayer));
-    neurons_.at(i)->changeWeights(learningRate, momentum, nextLayer);
+    nextLayerWeightDelta = {};
+    for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
+      const double delta = (*nextLayer)[j]->getWeightDelta();
+      nextLayerWeightDelta.push_back(delta);
+    }
+
+    neurons_.at(i)->setWeightDelta(neurons_.at(i)->countWeightDelta(nextLayerWeightDelta));
+    neurons_.at(i)->changeWeights(learningRate, momentum, nextLayerWeightDelta);
   }
   if (hasBias()){
-    getBias()->changeWeights(learningRate, momentum, nextLayer);
+    getBias()->changeWeights(learningRate, momentum, nextLayerWeightDelta);
   }
 }
 

@@ -85,24 +85,23 @@ std::ostream& operator<<(std::ostream &out, const Neuron &neuron)
   return out;
 }
 
-double Neuron::countWeightDelta(const std::shared_ptr<Layer> &nextLayer) const
+double Neuron::countWeightDelta(const std::vector<double> &nextLayerWeightDelta) const
 {
   const double sigDx = getOutput() * (1 - getOutput());
 
   double sum = 0;
-  for (size_t j = 0; j < nextLayer->getNeuronQuantity(); j++){
-    const double delta = (*nextLayer)[j]->getWeightDelta() * getWeight(j);
+  for (size_t i = 0; i < nextLayerWeightDelta.size(); i++){
+    const double delta = nextLayerWeightDelta[i] * getWeight(i);
     sum += delta;
   }
   const double weightDelta = sigDx * sum;
   return weightDelta;
 }
 
-void Neuron::changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer)
+void Neuron::changeWeights(const double& learningRate, const double& momentum, const std::vector<double> &nextLayerWeightDelta)
 {
-  for (size_t i = 0; i < nextLayer->getNeuronQuantity(); i++){
-    const double delta = (*nextLayer)[i]->getWeightDelta();
-    const double gradient = getOutput() * delta;
+  for (size_t i = 0; i < nextLayerWeightDelta.size(); i++){
+    const double gradient = getOutput() * nextLayerWeightDelta[i];
 
     const double deltaW = learningRate * gradient + momentum * getPreviousDelta(i);
     setPreviousDelta(i, deltaW);

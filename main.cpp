@@ -54,7 +54,6 @@ int main(){
   std::string imagePath("/Users/miner34006/Documents/c++/Clion/Course project/trainData/newData/");
   for (size_t trainDigit = 9; trainDigit != -1; trainDigit--) {
     imageConverter.setImage(imagePath + std::to_string(trainDigit)  + ".bmp");
-    std::cout << imageConverter;
     std::cout << "Put " << trainDigit << " image | Answer = " << neuralNetwork->feedForward(imageConverter.getVecImage())[0] << "\n";
   }
 
