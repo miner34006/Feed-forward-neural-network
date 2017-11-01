@@ -18,8 +18,8 @@ public:
               const double &learningRate,
               const double &momentum);
 
-  void trainSingle(const std::vector<double> &trainData);
-  void trainSet();
+  void trainSet(const double &minError) override;
+  void trainSet() override;
 };
 
 #endif //COURSE_PROJECT_XORTRAIN_HPP

@@ -5,10 +5,8 @@
 #ifndef COURSE_PROJECT_NEURON_HPP
 #define COURSE_PROJECT_NEURON_HPP
 
-#include <vector>       /* vector */
-#include <cmath>        /* exp */
-#include <cstdlib>     /* srand, rand */
-#include <ctime>       /* time */
+#include <vector>
+#include <cmath>
 #include <iostream>
 
 #include "../layers/layer.hpp"
@@ -23,18 +21,17 @@ public:
   void setOutput(const double& output);
   void setWeightDelta(const double& output);
   void setPreviousDelta(const size_t& index, const double& delta);
+  void setWeight(const size_t& index, const double& value);
+  void setWeights(const size_t& nextLayerNeuronQuantity);
 
   double getInput() const;
   double getOutput() const;
   double getWeightDelta() const;
-  double getPreviousDelta(const size_t& index);
-
-  void setWeight(const size_t& index, const double& value);
-  void setWeights(const size_t& nextLayerNeuronQuantity);
+  double getPreviousDelta(const size_t& index) const;
   double getWeight(const size_t& index) const;
 
   double countWeightDelta(const std::shared_ptr<Layer>& nextLayer) const;
-  void changeWeights(const double& learningRate, const double& alpha, const std::shared_ptr<Layer>& nextLayer);
+  void changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer);
 
 private:
   double input_;

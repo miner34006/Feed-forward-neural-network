@@ -5,13 +5,15 @@
 #ifndef COURSE_PROJECT_imageConverter_HPP
 #define COURSE_PROJECT_imageConverter_HPP
 
-#include <opencv2/opencv.hpp>
-#include <istream>
+
 #include <vector>
 #include <string>
+#include <opencv2/opencv.hpp>
+
 
 class ImageConverter{
 public:
+  ImageConverter() = default;
   explicit ImageConverter(const std::string &fileName);
 
   friend std::ostream& operator<<(std::ostream& out, const ImageConverter& imageConverter);

@@ -23,15 +23,15 @@ public:
 
   size_t getLayersCount() const;
 
-  double feedForward(const std::vector<double> &data);
-  void backPropagation(const double &expect, const double &learningRate, const double &momentum);
+  std::vector<double> feedForward(const std::vector<double> &data);
+  void backPropagation(const std::vector<double> &expectedAnswer, const double &learningRate, const double &momentum);
+
+  double getError(const std::vector<double> &expectedAnswer) const;
 
 private:
   std::shared_ptr<InputLayer> inputLayer_;
   std::vector<std::shared_ptr<HiddenLayer>> hiddenLayers_;
   std::shared_ptr<OutputLayer> outputLayer_;
-
-  std::vector<std::shared_ptr<Layer>> layers_;
 
   void createLayers(const std::vector<int> &neuronPerLayer, const bool& hasBias);
   void setWeights();

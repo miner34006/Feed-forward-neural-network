@@ -14,8 +14,11 @@ public:
   friend std::ostream& operator<<(std::ostream& out, const OutputLayer& layer);
 
   double getMaxImpulse() const;
+  double getMaxImpulseIndex() const;
 
-  void changeWeights(const double& expected, const double& learningRate, const double& alpha);
+  double getError(const std::vector<double> &expectedAnswer) const;
+
+  void changeWeights(const std::vector<double> &expectedAnswer, const double& learningRate, const double& alpha);
 };
 
 std::ostream& operator<<(std::ostream& out, const OutputLayer& layer);

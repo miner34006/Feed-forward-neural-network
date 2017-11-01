@@ -53,19 +53,31 @@ void NeuralNetwork::passDataForward(const size_t &fromLayer, const size_t &toLay
   }
 }
 
-double NeuralNetwork::feedForward(const std::vector<double> &data)
+double NeuralNetwork::getError(const std::vector<double> &expectedAnswer) const
+{
+  return outputLayer_->getError(expectedAnswer);
+}
+
+std::vector<double> NeuralNetwork::feedForward(const std::vector<double> &data)
 {
   setInputData(data);
   for (size_t i = 0; i < getLayersCount() - 1; i++){
     passDataForward(i, i + 1);
   }
-  const double answer = (*outputLayer_).getMaxImpulse();
+
+  std::vector<double> answer;
+  answer.push_back((*outputLayer_).getMaxImpulseIndex());
+  answer.push_back((*outputLayer_).getMaxImpulse());
+
+  //TODO Возврат номера выхода
+  //const double answer = (*outputLayer_).getMaxImpulse();
+  //const double answer = (*outputLayer_).getMaxImpulseIndex();
   return answer;
 }
 
-void NeuralNetwork::backPropagation(const double &expect, const double &learningRate, const double &momentum)
+void NeuralNetwork::backPropagation(const std::vector<double> &expectedAnswer, const double &learningRate, const double &momentum)
 {
-  outputLayer_->changeWeights(expect, learningRate, momentum);
+  outputLayer_->changeWeights(expectedAnswer, learningRate, momentum);
 
   const size_t lastHiddenLayer = hiddenLayers_.size() - 1;
   hiddenLayers_[lastHiddenLayer]->changeWeights(learningRate, momentum, outputLayer_);

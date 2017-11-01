@@ -5,6 +5,7 @@
 #ifndef COURSE_PROJECT_TRAINING_HPP
 #define COURSE_PROJECT_TRAINING_HPP
 
+#include <string>
 #include <vector>
 #include <memory>
 
@@ -16,9 +17,7 @@ public:
            const double &learningRate,
            const double &momentum);
 
-  virtual void trainSingle(const std::vector<double> &trainData) = 0;
-  virtual void trainSet() = 0;
-
+  void autoTrain(const double &minError);
   void train(const size_t& epochCount);
 
 protected:
@@ -26,6 +25,11 @@ protected:
 
   double learningRate_;
   double momentum_;
+
+  double trainSingle(const std::vector<double> &trainData, const std::vector<double> &expectedAnswer);
+
+  virtual void trainSet(const double &minError) = 0;
+  virtual void trainSet() = 0;
 };
 
 #endif //COURSE_PROJECT_TRAINING_HPP

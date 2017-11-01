@@ -59,7 +59,7 @@ double Neuron::getWeightDelta() const
   return weightDelta_;
 }
 
-double Neuron::getPreviousDelta(const size_t& index)
+double Neuron::getPreviousDelta(const size_t& index) const
 {
   return previousWeightDelta.at(index);
 }
@@ -98,13 +98,13 @@ double Neuron::countWeightDelta(const std::shared_ptr<Layer> &nextLayer) const
   return weightDelta;
 }
 
-void Neuron::changeWeights(const double& learningRate, const double& alpha, const std::shared_ptr<Layer>& nextLayer)
+void Neuron::changeWeights(const double& learningRate, const double& momentum, const std::shared_ptr<Layer>& nextLayer)
 {
   for (size_t i = 0; i < nextLayer->getNeuronQuantity(); i++){
     const double delta = (*nextLayer)[i]->getWeightDelta();
     const double gradient = getOutput() * delta;
 
-    const double deltaW = learningRate * gradient + alpha * getPreviousDelta(i);
+    const double deltaW = learningRate * gradient + momentum * getPreviousDelta(i);
     setPreviousDelta(i, deltaW);
     setWeight(i, getWeight(i) + deltaW);
   }

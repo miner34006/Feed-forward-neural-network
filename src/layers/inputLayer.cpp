@@ -19,7 +19,7 @@ InputLayer::InputLayer(const size_t &neuronQuantity, const bool& hasBias):
 void InputLayer::setInputData(const std::vector<double> &data)
 {
   if (data.size() != neurons_.size()){
-    throw std::invalid_argument("Wrong data size;");
+    throw std::invalid_argument("Wrong input data size;");
   }
   for (size_t i = 0; i < neurons_.size(); i++){
     const double number = data.at(i);

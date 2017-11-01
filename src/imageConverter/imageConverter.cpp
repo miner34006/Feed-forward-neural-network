@@ -9,7 +9,6 @@ ImageConverter::ImageConverter(const std::string &fileName):
   image_(cv::imread(fileName, cv::IMREAD_GRAYSCALE)){
     std::ifstream imageFile;
     imageFile.open(fileName);
-
     if (!imageFile){
       throw std::invalid_argument("Invalid image;");
     }
@@ -29,7 +28,14 @@ std::vector<double> ImageConverter::getVecImage() const
 
 void ImageConverter::setImage(const std::string &fileName)
 {
+  std::ifstream imageFile;
+  imageFile.open(fileName);
+  if (!imageFile){
+    throw std::invalid_argument("Invalid image;");
+  }
+
   image_ = cv::imread(fileName, cv::IMREAD_GRAYSCALE);
+  vecImage_ = makeVectorPerformance();
 }
 
 std::vector<double> ImageConverter::makeVectorPerformance() const
@@ -39,7 +45,7 @@ std::vector<double> ImageConverter::makeVectorPerformance() const
     BLACK = 1
   };
 
-  std::vector<double> image;
+  std::vector<double> image = {};
   for (size_t i = 0; i < 10; i++){
     for (size_t j = 0; j < 10; j++){
       cv::Scalar intensity = getImage().at<uchar>(i, j);
@@ -51,18 +57,16 @@ std::vector<double> ImageConverter::makeVectorPerformance() const
       image.push_back((double)color);
     }
   }
-
   return image;
 }
 
 std::ostream& operator<<(std::ostream &out, const ImageConverter &imageConverter)
 {
-  for (size_t i = 0; i < 10; i++){
-    for (size_t j = 0; j < 10; j++){
-      cv::Scalar intensity = imageConverter.getImage().at<uchar>(i, j);
-
+  std::vector<double> vecImage = imageConverter.getVecImage();
+  for (size_t i = 0; i < 10; i++) {
+    for (size_t j = 0; j < 10; j++) {
       char sym = '-';
-      if (!intensity[0]){
+      if (vecImage[i * 10 + j]){
         sym = '*';
       }
       out << sym << " ";
