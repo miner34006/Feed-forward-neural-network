@@ -1,5 +1,4 @@
 # Feed forward neural network on C++
-***
 
 # Использование
 
