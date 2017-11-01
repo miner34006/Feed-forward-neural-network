@@ -69,9 +69,6 @@ std::vector<double> NeuralNetwork::feedForward(const std::vector<double> &data)
   answer.push_back((*outputLayer_).getMaxImpulseIndex());
   answer.push_back((*outputLayer_).getMaxImpulse());
 
-  //TODO Возврат номера выхода
-  //const double answer = (*outputLayer_).getMaxImpulse();
-  //const double answer = (*outputLayer_).getMaxImpulseIndex();
   return answer;
 }
 

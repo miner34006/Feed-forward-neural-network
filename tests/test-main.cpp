@@ -1,16 +1,16 @@
 #define BOOST_TEST_MAIN
 
-
 #include <boost/test/included/unit_test.hpp>
 
 #include "../src/neuron/neuron.hpp"
+#include "../src/layers/layer.hpp"
 #include "../src/neuralNetwork/neuralNetwork.hpp"
 
 BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
 
   BOOST_AUTO_TEST_CASE(testGetNeuronQuantity)
   {
-    NeuralNetwork neuralNetwork(0, 0, {1, 2, 4});
+    NeuralNetwork neuralNetwork({1, 2, 4}, false);
 
     BOOST_CHECK_EQUAL(neuralNetwork[0]->getNeuronQuantity(), 1);
     BOOST_CHECK_EQUAL(neuralNetwork[1]->getNeuronQuantity(), 2);
@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
 
   BOOST_AUTO_TEST_CASE(testSetInputData)
   {
-    NeuralNetwork neuralNetwork(0, 0, {3, 2, 4});
-    neuralNetwork.setInputData({0, 1, 2});
+    NeuralNetwork neuralNetwork({3, 2, 4}, false);
+    neuralNetwork.feedForward({0, 1, 2});
 
     BOOST_CHECK_CLOSE((*neuralNetwork[0])[0]->getInput(), 0, 0.1);
     BOOST_CHECK_CLOSE((*neuralNetwork[0])[1]->getInput(), 1, 0.1);
@@ -29,15 +29,13 @@ BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
 
   BOOST_AUTO_TEST_CASE(testForceDataFrom1To2)
   {
-    NeuralNetwork neuralNetwork(0, 0, {2, 2, 2});
-    neuralNetwork.setInputData({1, 1});
-
+    NeuralNetwork neuralNetwork({2, 2, 2}, false);
     (*neuralNetwork[0])[0]->setWeight(0, 0.5);
     (*neuralNetwork[0])[0]->setWeight(1, 0.1);
     (*neuralNetwork[0])[1]->setWeight(0, 0.2);
     (*neuralNetwork[0])[1]->setWeight(1, 1);
 
-    neuralNetwork.forceData(0, 1);
+    neuralNetwork.feedForward({1, 1});
 
     BOOST_CHECK_CLOSE((*neuralNetwork[1])[0]->getInput(), 0.7, 0.1);
     BOOST_CHECK_CLOSE((*neuralNetwork[1])[1]->getInput(), 1.1, 0.1);
@@ -48,9 +46,7 @@ BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
 
   BOOST_AUTO_TEST_CASE(testForceDataFrom2To3)
   {
-    NeuralNetwork neuralNetwork(0, 0, {2, 2, 2});
-    neuralNetwork.setInputData({1, 1});
-
+    NeuralNetwork neuralNetwork({2, 2, 2}, false);
     (*neuralNetwork[0])[0]->setWeight(0, 0.5);
     (*neuralNetwork[0])[0]->setWeight(1, 0.1);
     (*neuralNetwork[0])[1]->setWeight(0, 0.2);
@@ -61,9 +57,7 @@ BOOST_AUTO_TEST_SUITE(testNeuralNetwork)
     (*neuralNetwork[1])[1]->setWeight(0, 0.1);
     (*neuralNetwork[1])[1]->setWeight(1, 0.9);
 
-    neuralNetwork.forceData(0, 1);
-    neuralNetwork.forceData(1, 2);
-
+    neuralNetwork.feedForward({1, 1});
     BOOST_CHECK_CLOSE((*neuralNetwork[2])[0]->getInput(), 0.275, 1);
     BOOST_CHECK_CLOSE((*neuralNetwork[2])[1]->getInput(), 0.942, 1);
 
