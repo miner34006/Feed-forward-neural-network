@@ -2,7 +2,7 @@
 
 # Использование
 
-Заголовочный файл для подключения - /src/neuralNetwork/neuralNetwork.cpp
+Заголовочный файл для подключения - /src/neuralNetwork/neuralNetwork.hpp
 
 # Описание
 
